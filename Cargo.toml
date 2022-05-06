@@ -1,0 +1,15 @@
+[package]
+name = "file_encryptor"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ egui = "0.17.0"
+ eframe = "0.17.0"
+rfd = "0.8.1"
+orion = "0.17.1"
+blake2b_simd = "1.0.0"
+aes-gcm-siv = "0.10.3"
+serde_json = "1.0.81"
