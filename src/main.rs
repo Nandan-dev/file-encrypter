@@ -158,7 +158,7 @@ impl App for encbtn {
                 )
             });
             if (ui.button("save").clicked()) {
-                write!(File::open("./config.json").unwrap(), "{}",self.jsonsettings);
+                File::create("./config.json").unwrap().write_all(self.jsonsettings.as_bytes());
             }
 
         });
