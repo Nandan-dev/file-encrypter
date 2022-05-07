@@ -37,7 +37,7 @@ struct encbtn {
     hidepass: bool,
     jsonsettings: String,
     jsonvisible: bool,
-    jsonfile: File,
+    // jsonfile: File,
 }
 
 impl Default for encbtn {
@@ -51,9 +51,28 @@ impl Default for encbtn {
             hashpass: true,
             encryptionmethod: encmode::aes256,
             hidepass: true,
-            jsonsettings: read_to_string("./config.json").unwrap(),
+            jsonsettings: match (read_to_string("./config.json")) {
+                Ok(T) => T,
+                Err(E) => {"
+                {
+                    \"twofish\" : {
+                        \"salt\" : \"This is an amazing salt lololol this can be hover ever long as u want \",
+                        \"iterations\" : 3,
+                        \"memory\" : 1024,
+                        \"length\" : 32
+                    },
+
+                    \"aes256gcmsiv\" {
+                        \"personal\" : \"1$TEl5WXdiaHBCM\",
+                        \"salt\" : \"mxjZURQVA$IU3Srw\",
+                        \"nonceslice\" : \"GS2x3Yw$5ZXP\"
+                    }
+
+                }
+                ".to_string()},
+            },
             jsonvisible: false,
-            jsonfile: File::open("./config.json").unwrap()
+            // jsonfile: File::open("./config.json").unwrap()
         }
     }
 }
@@ -285,7 +304,7 @@ fn encaes256(password: String , infile : &String, outfile: &String) {
         Ok(T) => T,
         Err(e) => "
             {
-                \"aes256gcmsiv\" {
+                \"aes256gcmsiv\" : {
                     \"personal\" : \"1$TEl5WXdiaHBCM\",
                     \"salt\" : \"mxjZURQVA$IU3Srw\",
                     \"nonceslice\" : \"GS2x3Yw$5ZXP\"
@@ -325,7 +344,7 @@ fn decaes256(password: String , infile: &String , outfile: &String) {
         Ok(T) => T,
         Err(e) => "
             {
-                \"aes256gcmsiv\" {
+                \"aes256gcmsiv\" : {
                     \"personal\" : \"1$TEl5WXdiaHBCM\",
                     \"salt\" : \"mxjZURQVA$IU3Srw\",
                     \"nonceslice\" : \"GS2x3Yw$5ZXP\"
