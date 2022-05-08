@@ -301,6 +301,8 @@ fn guidec(password: String , infile: &String, outfile: &String, hashpass: bool) 
     fileloc.write_all(&decryptedtext);
 }
 
+
+
 fn encaes256(password: String , infile : &String, outfile: &String) {
 
     let jsonfile = match read_to_string("./config.json") {
@@ -336,10 +338,11 @@ fn encaes256(password: String , infile : &String, outfile: &String) {
     let ciphertext = cipher.encrypt(Nonce::from_slice(settings.get("nonceslice").unwrap().as_str().unwrap().as_bytes()), filecontents.as_ref()).expect("ERROR WHILE ENCRYPTING AES 256 BIT GCM SIV");
 
     for i in &ciphertext {
-        write!(fileloc , "{},", i);
+        write!(fileloc , "{}", *i as char);
     }
 
 }
+
 
 fn decaes256(password: String , infile: &String , outfile: &String) {
 
@@ -369,12 +372,9 @@ fn decaes256(password: String , infile: &String , outfile: &String) {
 
     let mut encrypted: Vec<u8> = Vec::new();
     let encryptedfile = read_to_string(infile.trim()).unwrap();
-    let splitted = encryptedfile.split(",");
 
-    for i in splitted {
-        if i != "" {
-            encrypted.push(i.trim().parse().unwrap());
-        }
+    for i in encryptedfile.chars() {
+        encrypted.push(i as u8);
     }
 
     let decipheredtext = cipher.decrypt(Nonce::from_slice(settings.get("nonceslice").unwrap().as_str().unwrap().as_bytes()), encrypted.as_ref()).unwrap();
@@ -387,9 +387,6 @@ fn decaes256(password: String , infile: &String , outfile: &String) {
 
     fileloc.write_all(&decryptedtext);
 }
-
-
-
 
 
 
